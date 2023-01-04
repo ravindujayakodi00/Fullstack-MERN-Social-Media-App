@@ -9,6 +9,11 @@ import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Routes and Controllers
+import { register } from './controllers/authController.js';
+import userRoutes from './routes/auth.js';
+import { verifyToken } from './middleware/auth.js';
+
 // Configarations 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,3 +38,19 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage });
+
+// Routes
+app.post("/auth/register", upload.single('picture'),register)
+app.use("/auth", userRoutes);
+
+// Database Connection
+const PORT = process.env.PORT || 5000;
+
+mongoose.set('strictQuery', true);
+
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    app.listen(PORT, () => console.log(`Connected to DB & Server running on port: ${PORT}`));
+}).catch((error) => console.log(`${error} did not connect`));
