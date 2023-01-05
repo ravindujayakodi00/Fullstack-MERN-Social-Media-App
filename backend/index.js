@@ -8,11 +8,12 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { verifyToken } from './middleware/auth.js';
 
 // Routes and Controllers
 import { register } from './controllers/authController.js';
-import userRoutes from './routes/auth.js';
-import { verifyToken } from './middleware/auth.js';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/users.js';
 
 // Configarations 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,7 +42,7 @@ const upload = multer({ storage });
 
 // Routes
 app.post("/auth/register", upload.single('picture'),register)
-app.use("/auth", userRoutes);
+app.use("/auth", authRoutes);
 
 // Database Connection
 const PORT = process.env.PORT || 5000;
