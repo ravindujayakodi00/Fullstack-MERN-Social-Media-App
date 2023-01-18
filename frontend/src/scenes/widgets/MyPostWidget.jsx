@@ -174,3 +174,5 @@ const MyPostWidget = ({ picturePath }) => {
     </WidgetWrapper>
   );
 };
+
+export default MyPostWidget;
